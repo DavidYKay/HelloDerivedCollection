@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:views="clr-namespace:HelloDerivedCollection.Views;assembly=HelloDerivedCollection"
+  x:Class="HelloDerivedCollection.Views.TweetPage"
+  >
+  <ContentPage.Content>
+    <StackLayout Spacing="10">
+
+      <Label Text="Hello World"
+        x:Name="HelloLabel"
+        />
+
+      <ListView
+        x:Name="TweetList"
+        RowHeight = "40"
+        >
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <views:TweetTileView ViewModel="{Binding}" />
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+
+      <Button Text="Join a Friend's Order"
+        x:Name="JoinButton"
+        />
+
+    </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

@@ -1,23 +1,52 @@
-﻿using System;
+﻿using Foundation;
+using ReactiveUI;
 using System.Collections.Generic;
 using System.Linq;
-
-using Foundation;
+using System.Reactive.Linq;
+using System;
 using UIKit;
+using Xamarin.Forms;
+using HelloDerivedCollection.ViewModels;
 
 namespace HelloDerivedCollection.iOS
 {
   [Register ("AppDelegate")]
-  public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
-  {
-    public override bool FinishedLaunching (UIApplication app, NSDictionary options)
-    {
-      global::Xamarin.Forms.Forms.Init ();
+  public partial class ReactiveAppDelegate : UIApplicationDelegate {
 
-      LoadApplication (new App ());
+    UIWindow window;
+    AutoSuspendHelper suspendHelper;
 
-      return base.FinishedLaunching (app, options);
+    public ReactiveAppDelegate () {
+      RxApp.SuspensionHost.CreateNewAppState = () => new AppBootstrapper();
+    }
+
+    public override bool FinishedLaunching (UIApplication app, NSDictionary options) {
+      Forms.Init ();
+      RxApp.SuspensionHost.SetupDefaultSuspendResume();
+
+      suspendHelper = new AutoSuspendHelper(this);
+      suspendHelper.FinishedLaunching(app, options);
+
+      UserError.RegisterHandler(ue => {
+          Console.WriteLine(ue.ErrorMessage);
+          return Observable.Return(RecoveryOptionResult.CancelOperation);
+          });
+
+      window = new UIWindow (UIScreen.MainScreen.Bounds);
+      var bootstrapper = RxApp.SuspensionHost.GetAppState<AppBootstrapper>();
+
+      window.RootViewController = bootstrapper.CreateMainPage().CreateViewController();
+      window.MakeKeyAndVisible ();
+
+      return true;
+    }
+
+    public override void DidEnterBackground(UIApplication application) {
+      suspendHelper.DidEnterBackground(application);
+    }
+
+    public override void OnActivated(UIApplication application) {
+      suspendHelper.OnActivated(application);
     }
   }
 }
-
