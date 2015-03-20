@@ -13,7 +13,8 @@ namespace HelloDerivedCollection.Views
     {
       InitializeComponent ();
       
-      this.OneWayBind(ViewModel, vm => vm.Model.Title, v => v.Name.Text);
+      this.OneWayBind(ViewModel,  vm => vm.Model.Title, v => v.Content.Text);
+      this.BindCommand(ViewModel, vm => vm.HideThisTweet, v => v.Content);
     }
 
     public TweetTileViewModel ViewModel {
