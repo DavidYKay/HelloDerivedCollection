@@ -12,20 +12,13 @@ namespace HelloDerivedCollection.ViewModels
   {
 
     [IgnoreDataMember]
-    public string UrlPathSegment { get { return "Hello"; } }
+    public string UrlPathSegment { get { return "Search"; } }
 
-    // Not serializing the HostScreen is very important, because you
-    // will create a loop in the object graph => crash
     [IgnoreDataMember]
     public IScreen HostScreen { get; protected set; }
     
-    //[DataMember]
-    //public ReactiveList<Tweet> Tweets { get; protected set; }
-
     [DataMember]
     public ReactiveList<TweetTileViewModel> TweetTiles { get; protected set; }
-    //[IgnoreDataMember]
-    //public IReactiveDerivedList<TweetTileViewModel> TweetTiles;
 
     [IgnoreDataMember]
     public IReactiveDerivedList<TweetTileViewModel> VisibleTiles;
@@ -90,14 +83,6 @@ namespace HelloDerivedCollection.ViewModels
       VisibleTiles = TweetTiles.CreateDerivedCollection(
           x => x,
           x => x.IsVisible);
-
-      TweetTiles.Changed.Subscribe( _ => {
-          Log.Debug("tweet tiles changed: " + TweetTiles.Count);
-          });
-
-      VisibleTiles.Changed.Subscribe( _ => {
-          Log.Debug("visible tiles changed: " + VisibleTiles.Count);
-          });
       
       Search = ReactiveCommand.Create ();
       Search.Subscribe( _ => {
@@ -134,28 +119,11 @@ namespace HelloDerivedCollection.ViewModels
       set { this.RaiseAndSetIfChanged(ref isVisible, value); }
     }
 
-    public ReactiveCommand<Object> RemoveThisTweet { get; protected set; }
-    public ReactiveCommand<Object> HideThisTweet { get; protected set; }
-
     public TweetTileViewModel(TweetViewModel parent, Tweet model, IScreen hostScreen = null)
     {
       hostScreen = hostScreen ?? Locator.Current.GetService<IScreen>();
 
       Model = model;
-
-      RemoveThisTweet = ReactiveCommand.Create ();
-      RemoveThisTweet.Subscribe( _ => {
-          Log.Debug("removing tweet: " + Model);
-//          parent.Tweets.Remove(Model);
-          });
-
-      HideThisTweet = ReactiveCommand.Create ();
-      HideThisTweet.Subscribe( _ => {
-          Log.Debug("hiding tweet: " + Model);
-          var index = parent.TweetTiles.IndexOf(this);
-          parent.TweetTiles[index].IsVisible = false;
-          this.IsVisible = false;
-          });
     }
   }
 }

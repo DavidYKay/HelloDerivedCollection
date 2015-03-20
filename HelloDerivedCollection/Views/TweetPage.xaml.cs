@@ -16,7 +16,6 @@ namespace HelloDerivedCollection.Views
       
       this.OneWayBind(ViewModel, vm => vm.VisibleTiles, v => v.TweetList.ItemsSource);
       this.Bind(ViewModel, vm => vm.SearchQuery, v => v.SearchEntry.Text);
-      this.BindCommand(ViewModel, vm => vm.HideTweet, v => v.HideButton);
     }
 
     public TweetViewModel ViewModel {
