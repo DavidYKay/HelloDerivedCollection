@@ -7,6 +7,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using ReactiveUI;
+using HelloDerivedCollection.ViewModels;
 
 namespace HelloDerivedCollection.Droid
 {
@@ -19,7 +21,8 @@ namespace HelloDerivedCollection.Droid
 
       global::Xamarin.Forms.Forms.Init (this, bundle);
 
-      LoadApplication (new App ());
+      var bootstrapper = new AppBootstrapper();
+      this.SetPage(bootstrapper.CreateMainPage());
     }
   }
 }

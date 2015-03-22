@@ -1,13 +1,9 @@
 ﻿using System;
-using System;
 using ReactiveUI;
 using Splat;
 using Xamarin.Forms;
 using ReactiveUI.XamForms;
 using HelloDerivedCollection.Views;
-//using Akavache;
-
-//using HelloDerivedCollection.ViewModels;
 
 namespace HelloDerivedCollection.ViewModels
 {
@@ -21,9 +17,6 @@ namespace HelloDerivedCollection.ViewModels
     {
       Router = new RoutingState();
       Locator.CurrentMutable.RegisterConstant(this, typeof(IScreen));
-
-      // Set up Akavache
-//      BlobCache.ApplicationName = "Lazyfood";
 
       // Router
       Locator.CurrentMutable.Register(() => new TweetPage(), typeof(IViewFor<TweetViewModel>));
